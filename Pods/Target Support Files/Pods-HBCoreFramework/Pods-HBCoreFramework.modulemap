@@ -1,0 +1,6 @@
+framework module Pods_HBCoreFramework {
+  umbrella header "Pods-HBCoreFramework-umbrella.h"
+
+  export *
+  module * { export * }
+}

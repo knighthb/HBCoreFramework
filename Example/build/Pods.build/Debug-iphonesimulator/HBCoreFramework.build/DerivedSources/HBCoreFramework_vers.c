@@ -1,0 +1,1 @@
+ const unsigned char HBCoreFrameworkVersionString[] __attribute__ ((used)) = "@(#)PROGRAM:HBCoreFramework  PROJECT:Pods-0.1.0" "\n"; const double HBCoreFrameworkVersionNumber __attribute__ ((used)) = (double)0.1;

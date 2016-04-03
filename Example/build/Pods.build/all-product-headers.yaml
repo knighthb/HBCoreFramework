@@ -1,0 +1,33 @@
+{
+  'version': 0,
+  'case-sensitive': 'false',
+  'roots': [
+    {
+      'type': 'directory',
+      'name': "/Users/knight/githubRepository/HBCoreFramework/Example/build/Debug-iphonesimulator/HBCoreFramework.framework/Headers",
+      'contents': [
+        {
+          'type': 'file',
+          'name': "HBCoreFramework-Swift.h",
+          'external-contents': "/Users/knight/githubRepository/HBCoreFramework/Example/build/Debug-iphonesimulator/HBCoreFramework.framework/Headers/HBCoreFramework-Swift.h"
+        },
+        {
+          'type': 'file',
+          'name': "HBCoreFramework-umbrella.h",
+          'external-contents': "/Users/knight/githubRepository/HBCoreFramework/Example/Pods/Target Support Files/HBCoreFramework/HBCoreFramework-umbrella.h"
+        }
+      ]
+    },
+    {
+      'type': 'directory',
+      'name': "/Users/knight/githubRepository/HBCoreFramework/Example/build/Debug-iphonesimulator/HBCoreFramework.framework/Modules",
+      'contents': [
+        {
+          'type': 'file',
+          'name': "module.modulemap",
+          'external-contents': "/Users/knight/githubRepository/HBCoreFramework/Example/build/Pods.build/Debug-iphonesimulator/HBCoreFramework.build/module.modulemap"
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,14 @@
+PODS:
+  - HBCoreFramework (0.1.0)
+
+DEPENDENCIES:
+  - HBCoreFramework (from `../`)
+
+EXTERNAL SOURCES:
+  HBCoreFramework:
+    :path: ../
+
+SPEC CHECKSUMS:
+  HBCoreFramework: 8baa47ffcf737fcf419210bf30bcf52d15c47a57
+
+COCOAPODS: 0.38.2

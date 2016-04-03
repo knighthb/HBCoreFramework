@@ -1,0 +1,25 @@
+{
+  "name": "HBCoreFramework",
+  "version": "0.1.0",
+  "summary": "A short description of HBCoreFramework.",
+  "description": "",
+  "homepage": "https://github.com/<GITHUB_USERNAME>/HBCoreFramework",
+  "license": "MIT",
+  "authors": {
+    "knight": "huangbin911@gmial.com"
+  },
+  "source": {
+    "git": "https://github.com/<GITHUB_USERNAME>/HBCoreFramework.git",
+    "tag": "0.1.0"
+  },
+  "platforms": {
+    "ios": "7.0"
+  },
+  "requires_arc": true,
+  "source_files": "Pod/Classes/**/*",
+  "resource_bundles": {
+    "HBCoreFramework": [
+      "Pod/Assets/*.png"
+    ]
+  }
+}
