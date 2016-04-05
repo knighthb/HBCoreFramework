@@ -10,11 +10,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "HBCoreFramework/AppDelegate.m"
-            timestampString = "480673352.069822"
+            timestampString = "481552191.969587"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "37"
-            endingLineNumber = "37"
+            startingLineNumber = "56"
+            endingLineNumber = "56"
             landmarkName = "-application:didFinishLaunchingWithOptions:"
             landmarkType = "5">
          </BreakpointContent>
@@ -25,30 +25,24 @@
             shouldBeEnabled = "Yes"
             ignoreCount = "0"
             continueAfterRunningActions = "No"
-            filePath = "Pods/AFNetworking/AFNetworking/AFHTTPSessionManager.m"
-            timestampString = "480673495.111337"
+            filePath = "HBCoreFramework/Classes/Entity/HBPropertyInfo.m"
+            timestampString = "481553760.864955"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "119"
-            endingLineNumber = "119"
-            landmarkName = "-GET:parameters:progress:success:failure:"
+            startingLineNumber = "80"
+            endingLineNumber = "80"
+            landmarkName = "-initWithProperty:"
             landmarkType = "5">
          </BreakpointContent>
       </BreakpointProxy>
       <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         BreakpointExtensionID = "Xcode.Breakpoint.ExceptionBreakpoint">
          <BreakpointContent
             shouldBeEnabled = "Yes"
             ignoreCount = "0"
             continueAfterRunningActions = "No"
-            filePath = "Pods/AFNetworking/AFNetworking/AFURLSessionManager.m"
-            timestampString = "480673537.078134"
-            startingColumnNumber = "9223372036854775807"
-            endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "764"
-            endingLineNumber = "764"
-            landmarkName = "-dataTaskWithRequest:uploadProgress:downloadProgress:completionHandler:"
-            landmarkType = "5">
+            scope = "0"
+            stopOnStyle = "0">
          </BreakpointContent>
       </BreakpointProxy>
    </Breakpoints>

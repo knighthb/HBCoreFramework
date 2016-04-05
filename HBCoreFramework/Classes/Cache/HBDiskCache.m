@@ -7,12 +7,21 @@
 //
 
 #import "HBDiskCache.h"
+#import "HBStorage.h"
+#import "HBStorageItem.h"
+#import "HBArchiveStorage.h"
+#define kCurrentTime [[NSDate date] timeIntervalSince1970]
 @interface HBDiskCache ()
 @property (nonatomic , strong) NSString *name;
 @property (nonatomic , strong) NSString *path;
+@property (nonatomic , strong) HBStorage *storage;
 @end
 
 @implementation HBDiskCache
+- (instancetype)init {
+    return [self initWithName:@"defaultCache"];
+}
+
 - (instancetype)initWithName:(NSString *)name {
     NSAssert(name && name.length > 0, @"please specify a name!");
     _name = name;
@@ -34,26 +43,72 @@
         NSAssert(!error, @"create disk cache path failed!");
         
     }
+    self.storage = [[HBArchiveStorage alloc] initWithPath:path];
+    return self;
+}
+
+- (instancetype)initWithStorage:(HBStorage *)storage {
+    self = [super init];
+    if (self) {
+        self.path = storage.path;
+        self.storage = storage;
+    }
     return self;
 }
 
 - (BOOL)containsObjectForKey:(id)key {
-    return NO;
+    if ([self.storage containsObjectForKey:key]) {
+        HBStorageItem * storageItem = [self.storage objectForKey:key];
+        if ([self isExpired:storageItem.modifyTime] ) {
+            [self.storage removeObjectForKey:key];
+            return NO;
+        }else {
+            return YES;
+        }
+    }else {
+        return NO;
+    }
 }
 
-- (BOOL)removeObjectForKey:(NSString *)key {
-    return NO;
+- (void)removeObjectForKey:(NSString *)key {
+    [self.storage removeObjectForKey:key];
 }
 
-- (BOOL)removeAllObjects {
-    return NO;
+- (void)removeAllObjects {
+    [self.storage removeAllObjects];
 }
 
 - (void)setObject:(id<NSCoding>)object forKey:(NSString *)key {
-    
+    HBStorageItem * storageItem = nil;
+    if ([self.storage containsObjectForKey:key]) {
+        storageItem  = [self.storage objectForKey:key];
+    }else {
+        storageItem = [[HBStorageItem alloc] init];
+        storageItem.key = key;
+        storageItem.value = object;
+        storageItem.path = self.path;
+    }
+    storageItem.modifyTime = kCurrentTime;
+    [self.storage setValue:storageItem forKey:key];
 }
 
 - (id)objectForKey:(NSString *)key {
-    return nil;
+    if (![self.storage containsObjectForKey:key]) {
+        return nil;
+    }
+   HBStorageItem * storageItem = [self.storage objectForKey:key];
+    if ([self isExpired:storageItem.modifyTime]) {
+        [self.storage removeObjectForKey:key];
+        return nil;
+    }else {
+        storageItem.accessTime = kCurrentTime;
+        [self.storage setValue:storageItem forKey:key];
+    }
+    return storageItem.value;
+}
+
+#pragma mark - private methods
+- (BOOL)isExpired:(NSTimeInterval)timeInterval {
+    return kCurrentTime-timeInterval>=0?YES:NO;
 }
 @end

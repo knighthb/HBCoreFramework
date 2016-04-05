@@ -8,9 +8,12 @@
 
 #import "AppDelegate.h"
 #import "AFNetworking.h"
+#import "HBArchiveStorage.h"
+#import "HBStorageItem.h"
+#import "HBEntity.h"
 
 @interface AppDelegate ()
-
+@property (nonatomic , strong) HBArchiveStorage * storage;
 @end
 
 @implementation AppDelegate
@@ -33,7 +36,24 @@
 
     }];
     NSLog(@"http://totoal === count=%ld",manager.tasks.count);
-
+  NSString * filePath =  NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES).firstObject;
+    NSString * fileName = [filePath stringByAppendingPathComponent:@"storageTest"];
+    NSLog(@"fileName = %@",fileName);
+    self.storage = [[HBArchiveStorage alloc]  initWithPath:fileName];
+    for (int i = 0; i< 10; i++) {
+        
+        NSString * key = [NSString stringWithFormat:@"key%d",i];
+//        HBStorageItem * item = [[HBStorageItem alloc] init];
+//        item.key = key;
+//        item.value = @"hahahahaaha";
+//        [self.storage setValue:item forKey:key];
+     HBStorageItem * item = [self.storage objectForKey:key];
+        NSLog(@"key = %@ | value = %@",item.key,item.value);
+    }
+    
+    HBEntity * entity = [HBEntity transferEntityWithDic:@{@"entityname":@"hehe",
+                                                          @"entitynum":@"1"}];
+    NSLog(@"%@",entity);
     return YES;
 }
 

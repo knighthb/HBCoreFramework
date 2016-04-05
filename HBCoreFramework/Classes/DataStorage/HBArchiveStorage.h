@@ -9,5 +9,5 @@
 #import "HBStorage.h"
 
 @interface HBArchiveStorage : HBStorage
-
+- (instancetype)initWithPath:(NSString *)path;
 @end
