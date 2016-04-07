@@ -20,6 +20,15 @@ typedef NS_OPTIONS(NSUInteger, HBTypeEncodingPropertyType) {
     HBTypeEncodingPropertyDynamic   = 1 << 5,
     HBTypeEncodingPropertyGetter    = 1 << 6,
     HBTypeEncodingPropertySetter   = 1 << 7,
+    
+    HBTypeEncodingIntType = 1 << 8,
+    HBTypeEncodingShortType = 1 << 9,
+    HBTypeEncodingDoubleType = 1 << 10,
+    HBTypeEncodingLongType = 1 << 11,
+    HBTypeEncodingFloatType = 1 << 12,
+    HBTypeEncodingBoolType = 1 << 13,
+    HBTypeEncodingIntegerType = 1 << 14,
+    HBTypeEncodingUIntegerType = 1 << 15
 };
 
 @interface HBPropertyInfo : NSObject
@@ -31,6 +40,10 @@ typedef NS_OPTIONS(NSUInteger, HBTypeEncodingPropertyType) {
 @property (nonatomic, assign, readonly) SEL setter;
 @property (nonatomic, assign, readonly)HBTypeEncodingPropertyType type;
 @property (nonatomic, copy, readonly)NSString * iVarName;
+@property (nonatomic, assign, readonly) BOOL isNumber;
 
 - (instancetype)initWithProperty:(objc_property_t)property;
+
+- (BOOL)canSetValue ;
+
 @end

@@ -11,6 +11,7 @@
 #import "HBPropertyInfo.h"
 #import <objc/runtime.h>
 #import <objc/message.h>
+#import "HBEntityUtil.h"
 @implementation HBEntity
 static char * filerClassName(const char * sourceValue) {
     size_t len = strlen(sourceValue);
@@ -31,12 +32,28 @@ static bool isSameClass(Class sourceClazz, Class desClazz) {
     if (strcmp(class_getName(sourceClazz), class_getName(desClazz))==0) {
         return YES;
     }else {
-//        if () {
-//            <#statements#>
-//        }
+        //        if () {
+        //            <#statements#>
+        //        }
         return NO;
     }
 }
+
++ (BOOL)boolValueWith:(NSString *)boolString {
+    if (boolString && boolString.length > 0) {
+        const char * lowercaseBoolString = boolString.lowercaseString.UTF8String;
+        //只要不是no、false和0都返回YES
+        if (strEqualTo("no", lowercaseBoolString) ||
+            strEqualTo("false", lowercaseBoolString) ||
+            strEqualTo("0", lowercaseBoolString)) {
+            return NO;
+        }else {
+            return YES;
+        }
+    }
+    return NO;
+}
+
 static bool isFoundationClass(Class clazz) {
     
     if (isSameClass(clazz ,[NSString class])) {
@@ -61,32 +78,6 @@ static bool isFoundationClass(Class clazz) {
     }
 }
 
-static Class classOfProperty(struct objc_property * property) {
-    const char * attributes = property_getAttributes(property);
-    Class clazz = nil;
-    NSLog(@"%s",attributes);
-    unsigned int attributesCount;
-    objc_property_attribute_t * attributes_t = property_copyAttributeList(property, &attributesCount);
-    for (unsigned int attrIndex=0; attrIndex < attributesCount; attrIndex ++) {
-        objc_property_attribute_t property_attr_t = attributes_t[attrIndex];
-        NSLog(@"property attribute %d: name = %s | value = %s",attrIndex,property_attr_t.name,property_attr_t.value);
-        if (strcmp("T", property_attr_t.name)==0) {//看是什么类型的
-            char * value = filerClassName(property_attr_t.value);
-            NSString * className = [[NSString alloc ]initWithCString:value encoding:NSUTF8StringEncoding];
-            clazz = NSClassFromString(className);
-            NSLog(@"class is %@",clazz);
-            free(value);
-        }
-    }
-    return clazz;
-}
-
-static bool needRecursiveWithClass(Class clazz) {
-    if ([clazz conformsToProtocol:@protocol(HBEntityProtocol)]) {
-        return YES;
-    }
-    return NO;
-}
 
 + (instancetype)transferEntityWithObject:(id)object {
     if ([object isKindOfClass:[NSDictionary class]]) {
@@ -98,16 +89,69 @@ static bool needRecursiveWithClass(Class clazz) {
 }
 
 + (instancetype)transferEntityWithArray:(NSArray *)array {
-    return [[self alloc] init];
+    unsigned int outCount;
+    NSDictionary * reverseTransferDic = nil;
+    id instance = [[self alloc] init];
+    
+    if ([instance respondsToSelector:@selector(hb_transferDic)]) {
+        reverseTransferDic = [self reverseTransferDic:[instance hb_transferDic]];
+    }
+    objc_property_t * properties = class_copyPropertyList([self class], &outCount);
+    if (outCount > 0) {
+        for (unsigned int index = 0; index < outCount; index++) {
+            struct objc_property * property = properties[index];
+            const char * name =  property_getName(property);
+            NSLog(@"%s",name);
+            NSString * key = [NSString stringWithUTF8String:name];
+            if ([[self hb_filerArray] containsObject:key]) {
+                continue;
+            }
+            if (reverseTransferDic) {
+                if (reverseTransferDic[key]) {
+                    key = reverseTransferDic[key];
+                }
+            }
+            HBPropertyInfo * propertyInfo = [[HBPropertyInfo alloc] initWithProperty:property];
+            id data =[self entityArray:array withKey:key];
+            if ([propertyInfo canSetValue]) {
+                ((void (*)(id,SEL,id))(void *)objc_msgSend)(instance,propertyInfo.setter,data);
+            }
+            
+        }
+    }
+    return instance;
+
+}
+
++ (NSMutableArray *)entityArray:(NSArray *)array withKey:(NSString *)key{
+    if ([array isKindOfClass:[NSArray class]]) {
+        NSMutableArray * instanceArray = @[].mutableCopy;
+        for (unsigned int index = 0; index<[array count]; index++) {
+            if ([self conformsToProtocol:@protocol(HBEntityProtocol)] &&
+                [self respondsToSelector:@selector(hb_objectClassForKeyDic)]) {
+                NSDictionary * mapedKeyClass = [self hb_objectClassForKeyDic];
+                if (mapedKeyClass) {
+                    Class cls = mapedKeyClass[key];
+                    if (cls && ![cls isSubclassOfClass:[NSNull class]]) {
+                        id data = [cls transferEntityWithObject:array[index]];
+                        [instanceArray addObject:data];
+                    }
+                }
+            }
+        }
+        return instanceArray;
+    }
+    return nil;
 }
 
 + (instancetype)transferEntityWithDic:(NSDictionary *)dic {
     unsigned int outCount;
     NSDictionary * reverseTransferDic = nil;
-    if ([self hb_transferDic]) {
-       reverseTransferDic = [self reverseTransferDic:[self hb_transferDic]];
-    }
     id instance = [[self alloc] init];
+
+    if ([instance respondsToSelector:@selector(hb_transferDic)]) {
+        reverseTransferDic = [self reverseTransferDic:[instance hb_transferDic]];
+    }
     objc_property_t * properties = class_copyPropertyList([self class], &outCount);
     if (outCount > 0) {
         for (unsigned int index = 0; index < outCount; index++) {
@@ -125,7 +169,7 @@ static bool needRecursiveWithClass(Class clazz) {
             }
             HBPropertyInfo * propertyInfo = [[HBPropertyInfo alloc] initWithProperty:property];
             Class clazz = propertyInfo.clazz;
-            if ([clazz isSubclassOfClass:[NSMutableArray class]] || [clazz isSubclassOfClass:[NSDictionary class]]) {
+            if ([clazz isSubclassOfClass:[NSArray class]]) {
                 if ([self conformsToProtocol:@protocol(HBEntityProtocol)] &&
                     [self respondsToSelector:@selector(hb_objectClassForKeyDic)]) {
                     NSDictionary * mapedKeyClass = [self hb_objectClassForKeyDic];
@@ -133,32 +177,65 @@ static bool needRecursiveWithClass(Class clazz) {
                         Class cls = mapedKeyClass[key];
                         if (cls && ![cls isSubclassOfClass:[NSNull class]]) {
                             clazz = cls;
-                            id data = [clazz transferEntityWithObject:dic[key]];
-                            ((void (*)(id,SEL,id))(void *)objc_msgSend)(instance,propertyInfo.setter,data);
+                            id data = [self entityArray:dic[key] withKey:key];
+                            if ([propertyInfo canSetValue]) {
+                                ((void (*)(id,SEL,id))(void *)objc_msgSend)(instance,propertyInfo.setter,data);
+                            }
                         }
                     }
                 }
+            }else if ([clazz conformsToProtocol:@protocol(HBEntityProtocol)]) {
+                //自定义实体
+                id data = [clazz transferEntityWithObject:dic[key]];
+                if ([propertyInfo canSetValue]) {
+                    ((void (*)(id,SEL,id))(void *)objc_msgSend)(instance,propertyInfo.setter,data);
+                }
+            }else {
+                //普通
+                if (!propertyInfo.isNumber) {
+                    if ([propertyInfo canSetValue]) {
+                        ((void (*)(id,SEL,id))(void *)objc_msgSend)(instance,propertyInfo.setter,dic[key]);
+                    }
+                }else {
+                    if (propertyInfo.isNumber) {
+                        NSNumberFormatter * numFormatter =   [[NSNumberFormatter alloc] init];
+                       NSNumber * data = [numFormatter numberFromString:[NSString stringWithFormat:@"%@",dic[key]]];
+                        [self sendMsgToInstance:instance withSetter:propertyInfo withNumber:data];
+                    }
+                }
             }
-            ((void (*)(id,SEL,id))(void *)objc_msgSend)(instance,propertyInfo.setter,dic[key]);
         }
     }
     return instance;
 }
 
++ (void)sendMsgToInstance:(id )instance
+               withSetter:(HBPropertyInfo *) propertyInfo
+               withNumber:(NSNumber *)number{
+    if ([propertyInfo canSetValue]) {
+        if (propertyInfo.type & HBTypeEncodingUIntegerType) {
+            ((void (*)(id,SEL,NSUInteger))(void *)objc_msgSend)(instance,propertyInfo.setter,[number unsignedIntegerValue]);
+        }
+        else if (propertyInfo.type & HBTypeEncodingIntegerType) {
+            ((void (*)(id,SEL,NSInteger))(void *)objc_msgSend)(instance,propertyInfo.setter,[number integerValue]);
+        }else if (propertyInfo.type & HBTypeEncodingBoolType) {
+            ((void (*)(id,SEL,BOOL))(void *)objc_msgSend)(instance,propertyInfo.setter,[number boolValue]);
+        }else if (propertyInfo.type & HBTypeEncodingDoubleType){
+            ((void (*)(id,SEL,double))(void *)objc_msgSend)(instance,propertyInfo.setter,[number doubleValue]);
+        }else if (propertyInfo.type & HBTypeEncodingFloatType) {
+            ((void (*)(id,SEL,float))(void *)objc_msgSend)(instance,propertyInfo.setter,[number floatValue]);
+        }else if (propertyInfo.type & HBTypeEncodingIntType) {
+            ((void (*)(id,SEL,int))(void *)objc_msgSend)(instance,propertyInfo.setter,[number intValue]);
+        }else if (propertyInfo.type & HBTypeEncodingLongType) {
+            ((void (*)(id,SEL,long))(void *)objc_msgSend)(instance,propertyInfo.setter,[number longValue]);
+        }else if (propertyInfo.type & HBTypeEncodingShortType) {
+            ((void (*)(id,SEL,short))(void *)objc_msgSend)(instance,propertyInfo.setter,[number shortValue]);
+        }
+    }
+    
+}
+
 + (NSArray *)hb_filerArray{
     return @[@"hash",@"superclass",@"description",@"debugDescription"];
 }
-
-+ (NSDictionary *)hb_transferDic {
-    return @{@"entityname":@"entityName",
-             @"entitynum":@"entityNum"};
-}
-
-+ (NSDictionary *)hb_objectClassForKeyDic {
-    return @{@"hehe":[HBStorage class]};
-}
-
-//- (void)setEntityAge2:(HBStorage *)entityAge {
-//    _entityAge
-//}
 @end

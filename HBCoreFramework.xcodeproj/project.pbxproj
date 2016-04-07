@@ -29,10 +29,14 @@
 		DE9831E61CA2E71C007405ED /* HBTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = DE9831E51CA2E71C007405ED /* HBTableViewCell.m */; };
 		DE9831E91CA2E7F6007405ED /* HBTableViewRouter.m in Sources */ = {isa = PBXBuildFile; fileRef = DE9831E81CA2E7F6007405ED /* HBTableViewRouter.m */; };
 		DE9831EC1CA2E828007405ED /* HBTableViewCellPresenter.m in Sources */ = {isa = PBXBuildFile; fileRef = DE9831EB1CA2E828007405ED /* HBTableViewCellPresenter.m */; };
+		DED0A0A71CB55BA30033E80C /* HBArrayTestEntity.m in Sources */ = {isa = PBXBuildFile; fileRef = DED0A0A61CB55BA30033E80C /* HBArrayTestEntity.m */; };
+		DED0A0AA1CB600350033E80C /* HBEntityUtil.m in Sources */ = {isa = PBXBuildFile; fileRef = DED0A0A91CB600350033E80C /* HBEntityUtil.m */; };
 		DED512A11CA4DD0900E6288A /* HBTableDisplayData.m in Sources */ = {isa = PBXBuildFile; fileRef = DED512A01CA4DD0900E6288A /* HBTableDisplayData.m */; };
 		DED512A41CA4DDD400E6288A /* HBTableViewDisplaySection.m in Sources */ = {isa = PBXBuildFile; fileRef = DED512A31CA4DDD400E6288A /* HBTableViewDisplaySection.m */; };
 		DED512A71CA4DEF800E6288A /* HBEntity.m in Sources */ = {isa = PBXBuildFile; fileRef = DED512A61CA4DEF800E6288A /* HBEntity.m */; };
 		DED87D5A1CB22E3300DCBE43 /* HBPropertyInfo.m in Sources */ = {isa = PBXBuildFile; fileRef = DED87D591CB22E3300DCBE43 /* HBPropertyInfo.m */; };
+		DED87D831CB4EF2000DCBE43 /* HBTestPerson.m in Sources */ = {isa = PBXBuildFile; fileRef = DED87D821CB4EF2000DCBE43 /* HBTestPerson.m */; };
+		DED87D861CB4EF7000DCBE43 /* HBTestEntity.m in Sources */ = {isa = PBXBuildFile; fileRef = DED87D851CB4EF7000DCBE43 /* HBTestEntity.m */; };
 		DEDA0D651CAA62E4000DD1C0 /* HBStorageItem.m in Sources */ = {isa = PBXBuildFile; fileRef = DEDA0D641CAA62E4000DD1C0 /* HBStorageItem.m */; };
 		DEDA0D681CAA8280000DD1C0 /* HBArchiveStorage.m in Sources */ = {isa = PBXBuildFile; fileRef = DEDA0D671CAA8280000DD1C0 /* HBArchiveStorage.m */; };
 		DEDA0D6B1CAA8292000DD1C0 /* HBDBStorage.m in Sources */ = {isa = PBXBuildFile; fileRef = DEDA0D6A1CAA8292000DD1C0 /* HBDBStorage.m */; };
@@ -85,6 +89,10 @@
 		DE9831E81CA2E7F6007405ED /* HBTableViewRouter.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HBTableViewRouter.m; sourceTree = "<group>"; };
 		DE9831EA1CA2E828007405ED /* HBTableViewCellPresenter.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HBTableViewCellPresenter.h; sourceTree = "<group>"; };
 		DE9831EB1CA2E828007405ED /* HBTableViewCellPresenter.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HBTableViewCellPresenter.m; sourceTree = "<group>"; };
+		DED0A0A51CB55BA30033E80C /* HBArrayTestEntity.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HBArrayTestEntity.h; sourceTree = "<group>"; };
+		DED0A0A61CB55BA30033E80C /* HBArrayTestEntity.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HBArrayTestEntity.m; sourceTree = "<group>"; };
+		DED0A0A81CB600350033E80C /* HBEntityUtil.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HBEntityUtil.h; sourceTree = "<group>"; };
+		DED0A0A91CB600350033E80C /* HBEntityUtil.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HBEntityUtil.m; sourceTree = "<group>"; };
 		DED5129F1CA4DD0900E6288A /* HBTableDisplayData.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HBTableDisplayData.h; sourceTree = "<group>"; };
 		DED512A01CA4DD0900E6288A /* HBTableDisplayData.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HBTableDisplayData.m; sourceTree = "<group>"; };
 		DED512A21CA4DDD400E6288A /* HBTableViewDisplaySection.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HBTableViewDisplaySection.h; sourceTree = "<group>"; };
@@ -93,6 +101,10 @@
 		DED512A61CA4DEF800E6288A /* HBEntity.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HBEntity.m; sourceTree = "<group>"; };
 		DED87D581CB22E3300DCBE43 /* HBPropertyInfo.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HBPropertyInfo.h; sourceTree = "<group>"; };
 		DED87D591CB22E3300DCBE43 /* HBPropertyInfo.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HBPropertyInfo.m; sourceTree = "<group>"; };
+		DED87D811CB4EF2000DCBE43 /* HBTestPerson.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HBTestPerson.h; sourceTree = "<group>"; };
+		DED87D821CB4EF2000DCBE43 /* HBTestPerson.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HBTestPerson.m; sourceTree = "<group>"; };
+		DED87D841CB4EF7000DCBE43 /* HBTestEntity.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HBTestEntity.h; sourceTree = "<group>"; };
+		DED87D851CB4EF7000DCBE43 /* HBTestEntity.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HBTestEntity.m; sourceTree = "<group>"; };
 		DEDA0D631CAA62E4000DD1C0 /* HBStorageItem.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = HBStorageItem.h; path = ../Cache/HBStorageItem.h; sourceTree = "<group>"; };
 		DEDA0D641CAA62E4000DD1C0 /* HBStorageItem.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = HBStorageItem.m; path = ../Cache/HBStorageItem.m; sourceTree = "<group>"; };
 		DEDA0D661CAA8280000DD1C0 /* HBArchiveStorage.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HBArchiveStorage.h; sourceTree = "<group>"; };
@@ -260,6 +272,14 @@
 				DED512A61CA4DEF800E6288A /* HBEntity.m */,
 				DED87D581CB22E3300DCBE43 /* HBPropertyInfo.h */,
 				DED87D591CB22E3300DCBE43 /* HBPropertyInfo.m */,
+				DED87D811CB4EF2000DCBE43 /* HBTestPerson.h */,
+				DED87D821CB4EF2000DCBE43 /* HBTestPerson.m */,
+				DED87D841CB4EF7000DCBE43 /* HBTestEntity.h */,
+				DED87D851CB4EF7000DCBE43 /* HBTestEntity.m */,
+				DED0A0A51CB55BA30033E80C /* HBArrayTestEntity.h */,
+				DED0A0A61CB55BA30033E80C /* HBArrayTestEntity.m */,
+				DED0A0A81CB600350033E80C /* HBEntityUtil.h */,
+				DED0A0A91CB600350033E80C /* HBEntityUtil.m */,
 			);
 			path = Entity;
 			sourceTree = "<group>";
@@ -443,8 +463,10 @@
 			buildActionMask = 2147483647;
 			files = (
 				DED87D5A1CB22E3300DCBE43 /* HBPropertyInfo.m in Sources */,
+				DED0A0AA1CB600350033E80C /* HBEntityUtil.m in Sources */,
 				DE09C2AE1CA3E70600BAC6DD /* HBContext.m in Sources */,
 				DEDA0D711CAA82B9000DD1C0 /* HBFileStorage.m in Sources */,
+				DED87D861CB4EF7000DCBE43 /* HBTestEntity.m in Sources */,
 				DED512A11CA4DD0900E6288A /* HBTableDisplayData.m in Sources */,
 				DED512A71CA4DEF800E6288A /* HBEntity.m in Sources */,
 				DE09C2BB1CA3EBA300BAC6DD /* HBMemoryCache.m in Sources */,
@@ -457,6 +479,7 @@
 				DEDA0D681CAA8280000DD1C0 /* HBArchiveStorage.m in Sources */,
 				DE09C2B81CA3EB6700BAC6DD /* HBTableViewDataManager.m in Sources */,
 				DE09C2C41CA3EC2500BAC6DD /* HBStorage.m in Sources */,
+				DED0A0A71CB55BA30033E80C /* HBArrayTestEntity.m in Sources */,
 				DE9831031CA2DABE007405ED /* ViewController.m in Sources */,
 				DE9831EC1CA2E828007405ED /* HBTableViewCellPresenter.m in Sources */,
 				DE9831E91CA2E7F6007405ED /* HBTableViewRouter.m in Sources */,
@@ -468,6 +491,7 @@
 				DE9831E01CA2E377007405ED /* HBTableViewController.m in Sources */,
 				DE8D32281CA66D9600820D49 /* HBNetworkConfiger.m in Sources */,
 				DE09C2B11CA3E7D400BAC6DD /* HBTableViewInteractor.m in Sources */,
+				DED87D831CB4EF2000DCBE43 /* HBTestPerson.m in Sources */,
 				DE9830FD1CA2DABE007405ED /* main.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

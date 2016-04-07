@@ -11,6 +11,8 @@
 #import "HBArchiveStorage.h"
 #import "HBStorageItem.h"
 #import "HBEntity.h"
+#import "HBTestPerson.h"
+#import "HBArrayTestEntity.h"
 
 @interface AppDelegate ()
 @property (nonatomic , strong) HBArchiveStorage * storage;
@@ -50,12 +52,65 @@
      HBStorageItem * item = [self.storage objectForKey:key];
         NSLog(@"key = %@ | value = %@",item.key,item.value);
     }
+    NSNumber * number = [NSNumber numberWithInteger:34];
     
-    HBEntity * entity = [HBEntity transferEntityWithDic:@{@"entityname":@"hehe",
-                                                          @"entitynum":@"1"}];
-    NSLog(@"%@",entity);
+    HBTestPerson * entity = [HBTestPerson transferEntityWithDic:@{@"entityname":@"hehe",
+                                                          @"entitynum":@"1",
+                                                          @"testEntity":@{@"name":@"xiaoming",
+                                                                          @"age":@(34)
+                                                                         
+                                                                  },
+                                                                  @"testEntities":@[@{@"name":@"xiaoming",
+                                                                                      @"age":@(34)
+                                                                                      
+                                                                                      },
+                                                                                    @{@"name":@"xiaoming",
+                                                                                      @"age":@(34)
+                                                                                      
+                                                                                      },
+                                                                                    @{@"name":@"xiaoming",
+                                                                                      @"age":@(34)
+                                                                                      
+                                                                                      }]}];
+    NSLog(@"%@======",entity.testEntity.name);
+    if (entity.testEntities.count > 0) {
+        for (HBTestEntity * testEntity in entity.testEntities) {
+            NSLog(@"name = %@ | value = %ld",testEntity.name,testEntity.age);
+        }
+    }
+    HBArrayTestEntity * arrayTestEntity = [HBArrayTestEntity transferEntityWithObject:@[@{@"name":@"xiaoming",
+                                                                                          @"age":@(34)
+                                                                                          
+                                                                                          },
+                                                                                        @{@"name":@"xiaoming",
+                                                                                          @"age":@(34)
+                                                                                          
+                                                                                          },
+                                                                                        @{@"name":@"xiaoming",
+                                                                                          @"age":@(34)
+                                                                                          
+                                                                                          }]];
+    NSLog(@"%@",arrayTestEntity);
+    
     return YES;
 }
+ /*
+ @"testEntities":@[@{@"name":@"xiaoming",
+ @"age":@(34)
+ 
+ },
+ @{@"name":@"xiaoming",
+ @"age":@(34)
+ 
+ },
+ @{@"name":@"xiaoming",
+ @"age":@(34)
+ 
+ }]
+ 
+ 
+ */
+
 
 - (void)applicationWillResignActive:(UIApplication *)application {
     // Sent when the application is about to move from active to inactive state. This can occur for certain types of temporary interruptions (such as an incoming phone call or SMS message) or when the user quits the application and it begins the transition to the background state.

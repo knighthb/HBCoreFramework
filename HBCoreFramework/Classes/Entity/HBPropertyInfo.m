@@ -7,6 +7,7 @@
 //
 
 #import "HBPropertyInfo.h"
+#import "HBEntityUtil.h"
 @interface HBPropertyInfo()
 @property (nonatomic, assign, readwrite) objc_property_t property;
 @property (nonatomic, copy, readwrite) NSString *name;
@@ -16,27 +17,36 @@
 @property (nonatomic, assign, readwrite) SEL setter;
 @property (nonatomic, assign, readwrite)HBTypeEncodingPropertyType type;
 @property (nonatomic, copy, readwrite)NSString * iVarName;
-@end
+@property (nonatomic, assign, readwrite) BOOL isNumber;
 
+@end
+static NSDictionary * classMap;
+static NSDictionary * propertyTypeMap;
 @implementation HBPropertyInfo
-static char * filerClassName(const char * sourceValue) {
-    size_t len = strlen(sourceValue);
-    if (len <= 0) return nil;
-    char * value = malloc(sizeof(char *)*strlen(sourceValue-3));
-    unsigned int i;
-    unsigned int j = 0;
-    for (i=0; i < len; i++) {
-        char tmp = sourceValue[i];
-        if ('@'!=tmp && '\"'!=tmp) {
-            value[j++] = sourceValue[i];
-        }
-    }
-    value[j]= '\0';
-    return value;
+
++ (void)initialize {
+    classMap = @{
+                 @"B":[NSNumber class],//bool
+                 @"i":[NSNumber class],//int enum signed
+                 @"d":[NSNumber class],//double
+                 @"f":[NSNumber class],//float
+                 @"l":[NSNumber class],//long
+                 @"s":[NSNumber class],//short
+                 @"q":[NSNumber class],//NSInteger
+                 @"Q":[NSNumber class],//NSUInteger
+                 };
+    propertyTypeMap = @{
+                 @"B":@(HBTypeEncodingBoolType),//bool
+                 @"i":@(HBTypeEncodingIntType),//int enum signed
+                 @"d":@(HBTypeEncodingDoubleType),//double
+                 @"f":@(HBTypeEncodingFloatType),//float
+                 @"l":@(HBTypeEncodingLongType),//long
+                 @"s":@(HBTypeEncodingShortType),//short
+                 @"q":@(HBTypeEncodingIntegerType),//NSInteger
+                 @"Q":@(HBTypeEncodingUIntegerType),//NSUInteger
+                 };
 }
-bool strEqualTo(const char * srcStr,const char * desStr) {
-    return strcmp(srcStr, desStr)==0?YES:NO;
-}
+
 - (instancetype)initWithProperty:(objc_property_t)property {
     if (!property) return nil;
     self = [super init];
@@ -59,9 +69,11 @@ bool strEqualTo(const char * srcStr,const char * desStr) {
             unsigned int attributesCount;
             objc_property_attribute_t * attributes_t = property_copyAttributeList(property, &attributesCount);
             if (attributesCount > 0) {
-                for (unsigned int attrIndex; attrIndex < attributesCount; attrIndex ++) {
+                for (unsigned int attrIndex = 0; attrIndex < attributesCount; attrIndex ++) {
                     objc_property_attribute_t property_attr_t = attributes_t[attrIndex];
+                    NSLog(@"property attribute %d: name = %s | value = %s",attrIndex,property_attr_t.name,property_attr_t.value);
                     if (strEqualTo("T", property_attr_t.name)) {
+                        //数字、日期等格式没有处理
                         [self parseClassWithPropertyAttributeValue:property_attr_t.value];
                     }else if(strEqualTo("R", property_attr_t.name)) {
                         _type |= HBTypeEncodingPropertyReadOnly;
@@ -91,11 +103,48 @@ bool strEqualTo(const char * srcStr,const char * desStr) {
     return self;
 }
 
-- (void)parseClassWithPropertyAttributeValue:(const char *)attrValue {
-    char * value = filerClassName(attrValue);
-    NSString * className = [[NSString alloc ]initWithCString:value encoding:NSUTF8StringEncoding];
-    _clazz = NSClassFromString(className);
-    free(value);
+- (const char *)filterClassName:(const char *)sourceValue {
+    size_t len = strlen(sourceValue);
+    if (len <= 0) return nil;
+    if ('@'==sourceValue[0]) {//id 类型
+        _isNumber = NO;
+        if (len==1) {
+            return "NSValue";
+        }
+        char * value = malloc(sizeof(char *)*strlen(sourceValue-3));
+        unsigned int i;
+        unsigned int j = 0;
+        for (i=0; i < len; i++) {
+            char tmp = sourceValue[i];
+            if ('@'!=tmp && '\"'!=tmp) {
+                value[j++] = sourceValue[i];
+            }
+        }
+        value[j]= '\0';
+        return value;
+    }else {
+        if (len == 1) {
+            _isNumber = YES;
+            NSString * key = [NSString stringWithUTF8String:sourceValue];
+            _type |= [propertyTypeMap[key] integerValue];
+            return NSStringFromClass(classMap[key]).UTF8String;
+        }
+        return "NSString";
+    }
 }
 
+- (void)parseClassWithPropertyAttributeValue:(const char *)attrValue {
+    const char * value = [self filterClassName:attrValue];
+    NSString * className = [[NSString alloc ]initWithCString:value encoding:NSUTF8StringEncoding];
+    _clazz = NSClassFromString(className);
+    value = nil;
+}
+
+- (BOOL)canSetValue {
+    if (_type != HBTypeEncodingPropertyReadOnly && _type!=HBTypeEncodingPropertyDynamic && _type != HBTypeEncodingUnkownType) {
+        return YES;
+    }else {
+        return NO;
+    }
+}
 @end
